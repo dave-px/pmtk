@@ -52,6 +52,9 @@ Set a variable for your capture file name:
 CAPFILE=CaptureFile.pcap
 ```
 
+<br/>
+
+
 ### Tcpdump basics
 Basic local capture:
 ```
@@ -77,6 +80,9 @@ Save filtered traffic to a new file (Example: Save only DNS traffic to a new fil
 ```
 tcpdump -r $CAPFILE -w dns-only.cap port 53
 ```
+
+<br/>
+
 ### Ngrep basics
 Print live web traffic to console:
 ```
@@ -90,6 +96,9 @@ Grep for HTTP GET/POST requests:
 ```
 ngrep -d eth0 -W byline -q -t '^(GET|POST)' port 80
 ```
+
+<br/>
+
 ### Tcpflow basics
 Print ASCII packet data to console:
 ```
@@ -100,6 +109,8 @@ Extract all flows, objects, & files to output folder:
 mkdir tcpflow
 tcpflow -a -r $CAPFILE -o tcpflow/
 ```
+
+<br/>
 
 ### Connection stats
 Top 10 source IPs:
@@ -122,6 +133,9 @@ Top 10 destination ports (based on SYN packets):
 ```
 tcpdump -nn -r $CAPFILE |grep " IP " |grep "Flags \[S\]" |awk '{print$5}' |cut -d. -f 5- |sort |uniq -c |sort -nr |head
 ```
+
+<br/>
+
 ### DNS digging
 Top domains:
 ```
@@ -131,6 +145,9 @@ Top subdomains:
 ```
 tcpdump -nn -r $CAPFILE port 53 | egrep " A\? " | awk '{print$8}' |sort |uniq -c |sort -nr |head
 ```
+
+<br/>
+
 ### Private IP/MAC address leakage
 Grep for private IPs in packet data:
 ```
@@ -140,6 +157,9 @@ Grep for MACs in packet data:
 ```
 ngrep -q -t -W byline -I $CAPFILE '([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])' not port 5353
 ```
+
+<br/>
+
 ### Passive OS/app profiling
 OS/app summary via p0f:
 ```
@@ -149,6 +169,9 @@ OS/app list via PADS:
 ```
 pads -v -r $CAPFILE -w assets.csv port 80
 ```
+
+<br/>
+
 ### Profiling HTTP traffic
 Top 10 websites:
 ```
@@ -182,6 +205,9 @@ User-Agent profiling:
 ```
 ngrep -I $CAPFILE -W byline -q -t port 80 | egrep "^User-Agent: " |sort |uniq -ic | sort -nr
 ```
+
+<br/>
+
 ### Extracting objects/files
 Extract all objects/files & decode HTML:
 ```
@@ -195,6 +221,9 @@ Extracting & decoding with xplico:
 ```
 xplico -m pcap -f $CAPFILE
 ```
+
+<br/>
+
 ### Content profiling
 Search engine queries:
 ```
@@ -208,6 +237,9 @@ Top words from HTML content:
 ```
 cat tcpflow/*.html |html2text | egrep -o '\w{4,}' |sort |uniq -c |sort -nr |head -n25
 ```
+
+<br/>
+
 ### Personal contact info
 Email addresses with common TLDs:
 ```
@@ -225,6 +257,9 @@ Dashed or dotted phone numbers (more false positives):
 ```
 tcpflow -r "$CAPFILE" -c -s port 80 | grep --color -P "\d{3}[-.]\d{3}[-.]\d{4}"
 ```
+
+<br/>
+
 ### Email traffic
 Email senders, recipients, & email subjects:
 ```
@@ -248,6 +283,9 @@ tcpflow -C -0 -r $CAPFILE port 25 or port 110
 cat base64.txt | base64 -d > file.xxx
 file file.xxx   ### Verify file is correct type
 ```
+
+<br/>
+
 ### Password hunting
 FTP, Telnet, SMTP, POP3, HTTP, etc:
 ```
@@ -261,6 +299,9 @@ Finding SNMP community strings:
 ```
 tcpdump -A -nn -r $CAPFILE port 161
 ```
+
+<br/>
+
 ### Digging for PII & confidential data
 Credit card numbers:
 ```
@@ -278,6 +319,9 @@ Classified/tagged documents:
 ```
 tcpflow -c -s -r $CAPFILE | grep -v Cookie |egrep --color -i 'CONFIDENTIAL|PROTECTED|INTERNAL USE ONLY|TOP SECRET|CLASSIFIED'
 ```
+
+<br/>
+
 ### Parsing SMB/CIFS traffic
 SMB users, domains, & password hashes:
 ```
@@ -291,6 +335,9 @@ Carving files out of SMB traffic:
 ```
 tshark -nn -r $CAPFILE -q --export-objects smb,tmpfolder
 ```
+
+<br/>
+
 ### Parsing SQL traffic
 MySQL password hashes, queries, & responses:
 ```
@@ -300,6 +347,9 @@ MSSQL queries & responses:
 ```
 tshark -nn -r $CAPFILE -V -Y tcp.port==1433 | egrep "Query:|Data:|Data \[truncated\]:"
 ```
+
+<br/>
+
 ### Hardware/mobile device profiling
 Device info via HTTP:
 ```
@@ -323,6 +373,9 @@ grep "plist version" tcpflow/*
 apt install libplist-utils
 plistutil -i <plistfile>
 ```
+
+<br/>
+
 ### Location tracking data
 Via Apple default weather app, Wunderground, etc:
 ```
@@ -332,6 +385,9 @@ Via Windows default weather app:
 ```
 ngrep -I "$CAPFILE" -W byline -q -t 'weather.microsoft.com' port 80 |egrep --color "DisplayName="
 ```
+
+<br/>
+
 ### Mobile apps
 Android apps, versions, usage, etc:
 ```
@@ -357,6 +413,9 @@ Prime video streaming file downloads:
 ```
 ngrep -q -t -I $CAPFILE -W byline | grep -B6 'Prime%20Video'
 ```
+
+<br/>
+
 ### Inspecting SSL traffic
 Extract SSL certificates with tcpflow:
 ```
@@ -378,4 +437,6 @@ Decrypting SSL traffic using a known private key:
 ```
 tshark -r SSL-decryption.pcap -q -o "ssl.keys_list:192.168.56.101,443,http,server.pem" -z "follow,ssl,ascii,2"
 ```
+
+<br/>
 
