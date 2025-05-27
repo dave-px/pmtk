@@ -42,9 +42,15 @@ https://wiki.wireshark.org/SampleCaptures
 
 ### Getting started
 
-Install mining tools:
+Install mining tools (Ubuntu/Debian):
 ```
 apt update && apt install ngrep tcpflow xplico ssldump dsniff tshark p0f pads python-html2text
+```
+
+Install mining tools (macOS via brew):
+```
+brew install ngrep tcpflow ssldump p0f
+ln -s /Applications/Wireshark.app/Contents/MacOS/tshark /usr/local/bin/tshark  ### add tshark to path, assuming Wireshark is already installed
 ```
 
 Set a variable for your capture file name:
