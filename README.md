@@ -1,5 +1,7 @@
 # The Packet Miner's Tool Kit (PMTK)
 
+**Note:** All tools, techniques, and methodologies contained in this repository are intended for authorized security testing and educational purposes only. Use only on systems you own or have explicit written permission to test. Unauthorized use may violate local, state, and federal law. The author assumes no liability for misuse.
+
 ## Contents
 
 - [Overview](#overview)
